@@ -144,7 +144,7 @@ $paymentProcessor = new InvoicePayments($amount, $id, $login, $key);
 try {
     $payment_url = $paymentProcessor->createPayment();
     fn_change_order_status($order_id, 'O');
-    fn_create_payment_form($payment_url, null, 'Invoice', false);
+    fn_create_payment_form($payment_url, null, 'Invoice', false, 'get');
 } catch (Exception $e) {
     $msg = $e->getMessage();
     echo "<script>alert('$msg');</script>";
