@@ -2,7 +2,7 @@
 
 <h3>Установка</h3>
 
-1. [Скачайте плагин](https://github.com/Invoice-LLC/Invoice.Module.OpenCart/archive/master.zip) и скопируйте содержимое архива в корень сайта
+1. [Скачайте плагин](https://github.com/Invoice-LLC/Invoice.Module.CSCart/archive/master.zip) и скопируйте содержимое архива в корень сайта
 2. Перейдите во вкладку **Модули->Управление модулями**, найдите плагин Invoice и нажмите установить
 ![Imgur](https://imgur.com/yLBLjn1.png)
 3. Перейдите во вкладу **Администрирование->Способы оплаты**, нажмите "+"
