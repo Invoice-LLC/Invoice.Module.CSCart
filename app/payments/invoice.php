@@ -108,9 +108,7 @@ class InvoicePayments {
     }
 
     private function setTerminal($value) {
-        $fp = fopen('invoice_tid', 'w');
-        fwrite($fp, $value);
-        fclose($fp);
+       file_put_contents('invoice_tid', $value);
     }
 
     /**
@@ -118,14 +116,16 @@ class InvoicePayments {
      */
     private function getTerminal() {
         $name = "invoice_tid";
-        $fp = fopen($name, 'r');
-        $value = fread($fp, filesize($name));
-        fclose($fp);
 
-        return $value;
+        if(!file_exists('invoice_tid')) file_put_contents('invoice_tid', '');
+
+        $tid = file_get_contents('invoice_tid');
+
+        return $tid;
     }
 
     private function log($key,$str) {
+        if(!file_exists('invoice_payment.log')) file_put_contents('invoice_payment.log', '');
         $fp = fopen('invoice_payment.log', 'a+');
         fwrite($fp, "============$key=========="."\n\n");
         fwrite($fp, $str."\n\n");
