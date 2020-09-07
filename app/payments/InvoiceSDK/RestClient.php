@@ -2,7 +2,7 @@
 
 class RestClient
 {
-    public $url = "https://api.invoice1.su/api/v2/";
+    public $url = "https://api.invoice.su/api/v2/";
 
     public $login;
     public $apiKey;
