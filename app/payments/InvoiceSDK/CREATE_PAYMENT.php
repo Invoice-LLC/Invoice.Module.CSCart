@@ -4,7 +4,7 @@
 class CREATE_PAYMENT
 {
     /**
-     * @var ORDER
+     * @var INVOICE_ORDER
      */
     public $order;
     /**
