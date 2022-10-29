@@ -1,9 +1,13 @@
 <?php
+
+use Tygh\Template\Document\Order\Order;
+
 include "InvoiceSDK/RestClient.php";
 include "InvoiceSDK/CREATE_PAYMENT.php";
 include "InvoiceSDK/CREATE_TERMINAL.php";
 include "InvoiceSDK/common/ORDER.php";
 include "InvoiceSDK/common/SETTINGS.php";
+include "InvoiceSDK/common/ITEM.php";
 
 class InvoicePayments {
     private $amount;
@@ -42,6 +46,7 @@ class InvoicePayments {
         $request = new CREATE_TERMINAL($this->terminalName);
         $request->description = $this->terminalDescription;
         $request->type = "dynamical";
+        $request->defaultPrice = "1";
 
         $this->log("CreateTerminal_REQUEST", json_encode($request));
         $info = $this->restClient->CreateTerminal($request);
@@ -59,7 +64,11 @@ class InvoicePayments {
             throw new Exception("Не удалось создать терминал");
         }
 
-        $request = new CREATE_PAYMENT($this->getOrder(), $this->getSettings(), null);
+        $request = new CREATE_PAYMENT();
+        $request->order = $this->getOrder();
+        $request->settings = $this->getSettings();
+        $request->receipt = $this->getReceipt();
+
         $this->log("CREATE_PAYMENT_REQUEST", json_encode($request));
         $info = $this->restClient->CreatePayment($request);
         $this->log("CREATE_PAYMENT_RESPONSE", json_encode($info));
@@ -75,10 +84,11 @@ class InvoicePayments {
      * @return INVOICE_ORDER
      */
     private function getOrder() {
-        $order = new INVOICE_ORDER($this->amount);
+        $order = new INVOICE_ORDER();
+        $order->amount = $this->amount;
         $order->id = $this->id;
         $order->currency = "RUB";
-
+        
         return $order;
     }
 
@@ -86,10 +96,36 @@ class InvoicePayments {
      * @return SETTINGS
      */
     private function getSettings() {
-        $settings = new SETTINGS($this->terminal);
-        $settings->success_url = $_SERVER['REQUEST_URI'];
+        $url = ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+
+        $settings = new SETTINGS();
+        $settings->terminal_id = $this->terminal;
+        $settings->success_url = $url;
+        $settings->fail_url = $url;
 
         return $settings;
+    }
+
+    /**
+     * @return ITEM
+     */
+
+    private function getReceipt() {
+        $receipt = array();
+        $order = new Order($this->id);
+        $basket = $order->getProducts();
+
+        foreach ($basket as $basketItem) {
+            $item = new ITEM();
+            $item->name = $basketItem['product'];
+            $item->price = $basketItem['price'];
+            $item->resultPrice = $basketItem['subtotal'];
+            $item->quantity = $basketItem['amount'];
+
+            array_push($receipt, $item);
+        }
+
+        return $receipt;
     }
 
     /**

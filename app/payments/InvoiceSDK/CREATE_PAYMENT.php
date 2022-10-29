@@ -4,13 +4,12 @@
 class CREATE_PAYMENT
 {
     /**
-     * @var INVOICE_ORDER
+     * @var ORDER
      */
     public $order;
     /**
      * @var SETTINGS
      */
-
     public $settings;
     /**
      * @var array
@@ -21,24 +20,6 @@ class CREATE_PAYMENT
      */
     public $receipt;
 
-    /**
-     * Optional fields
-     * @var $mail string
-     * @var $phone string
-     */
     public $mail;
     public $phone;
-
-    /**
-     * CREATE_PAYMENT constructor.
-     * @param $order INVOICE_ORDER
-     * @param $settings SETTINGS
-     * @param $receipt array
-     */
-    public function __construct($order, $settings, $receipt)
-    {
-        $this->settings = $settings;
-        $this->order = $order;
-        $this->receipt = $receipt;
-    }
 }
