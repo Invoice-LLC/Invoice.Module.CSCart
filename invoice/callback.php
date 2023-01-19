@@ -9,7 +9,7 @@ class Callback {
     {
         $this->notification = $this->getData();
         $this->tranId = $this->notification['id'];
-        $this->id = $this->notification["order"]["id"];
+        $this->id = strstr($this->notification["order"]["id"], "-", true);
         $this->amount = $this->notification["order"]["amount"];
         $this->status = $this->notification["status"];
         $this->signature = $this->notification["signature"];

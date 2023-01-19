@@ -86,7 +86,7 @@ class InvoicePayments {
     private function getOrder() {
         $order = new INVOICE_ORDER();
         $order->amount = $this->amount;
-        $order->id = $this->id;
+        $order->id = "$this->id" . "-" . bin2hex(random_bytes(5));
         $order->currency = "RUB";
         
         return $order;
